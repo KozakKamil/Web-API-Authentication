@@ -43,7 +43,7 @@ public class GameService : IGameService
         return true;
     }
 
-    public Game? Get(int id)
+    public Game Get(int id)
     {
         var game = GameRepository.Games.FirstOrDefault(o => o.Id == id);
         return game is null ? null : game;
