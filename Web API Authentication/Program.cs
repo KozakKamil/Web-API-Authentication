@@ -50,7 +50,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
 builder.Services.AddAuthorization();
@@ -99,8 +99,8 @@ IResult Login(UserLogin user, IUserInterface service)
             new Claim(ClaimTypes.Name, loggedInUser.UserName),
             new Claim(ClaimTypes.Role, loggedInUser.Role),
             new Claim(ClaimTypes.Email, loggedInUser.EmailAddress),
-            new Claim(ClaimTypes.GivenName, loggedInUser.GivenName),
-            new Claim(ClaimTypes.Surname, loggedInUser.SurName)
+            new Claim(ClaimTypes.GivenName, loggedInUser.GivenName!),
+            new Claim(ClaimTypes.Surname, loggedInUser.SurName!)
         };
 
         var token = new JwtSecurityToken(
@@ -108,7 +108,7 @@ IResult Login(UserLogin user, IUserInterface service)
             audience: builder.Configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.Now.AddDays(30),
-            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
                 SecurityAlgorithms.HmacSha256)
             );
 
